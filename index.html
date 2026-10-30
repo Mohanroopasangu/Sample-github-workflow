@@ -1,0 +1,862 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURELIA | Luxury Jewelry</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --gold: #c49a52;
+    --dark: #171511;
+    --cream: #f9f6f0;
+    --muted: #777;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+}
+
+button { cursor: pointer; font-family: inherit; }
+
+header {
+    height: 82px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 15px #00000008;
+}
+
+.logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 35px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--gold);
+}
+
+nav {
+    display: flex;
+    gap: 32px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-size: 13px;
+    transition: .3s;
+}
+
+nav a:hover { color: var(--gold); }
+
+.header-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.header-actions button {
+    background: none;
+    border: none;
+    font-size: 21px;
+    position: relative;
+}
+
+#cart-count {
+    position: absolute;
+    top: -9px;
+    right: -10px;
+    background: var(--gold);
+    color: white;
+    font-size: 10px;
+    border-radius: 50%;
+    padding: 3px 6px;
+}
+
+.menu-btn { display: none; }
+
+.hero {
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    padding: 70px 9%;
+    background:
+      linear-gradient(90deg, #171511e8 0%, #17151190 50%, #17151120 100%),
+      url('https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1800&q=90');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.hero-content {
+    max-width: 570px;
+    animation: slideUp 1s ease;
+}
+
+.eyebrow {
+    color: #e5c17e;
+    letter-spacing: 5px;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 7vw, 85px);
+    line-height: 1.02;
+    font-weight: 500;
+}
+
+.hero p {
+    color: #e2ded7;
+    margin: 25px 0;
+    line-height: 1.9;
+    font-size: 14px;
+}
+
+.gold-btn {
+    background: var(--gold);
+    color: white;
+    border: 1px solid var(--gold);
+    padding: 15px 32px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    transition: .3s;
+}
+
+.gold-btn:hover {
+    background: transparent;
+    color: var(--gold);
+    transform: translateY(-3px);
+}
+
+.section {
+    padding: 85px 8%;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.section-heading small {
+    color: var(--gold);
+    letter-spacing: 4px;
+    font-size: 11px;
+}
+
+.section-heading h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.category {
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.category img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: .6s;
+}
+
+.category:hover img { transform: scale(1.1); }
+
+.category h3 {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 35px 10px 22px;
+    text-align: center;
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 29px;
+    background: linear-gradient(transparent, #000a);
+}
+
+.products-section { background: #fff; }
+
+.shop-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    border: 1px solid #ddd;
+    background: white;
+    padding: 9px 18px;
+    font-size: 12px;
+    transition: .3s;
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background: var(--dark);
+    color: white;
+}
+
+.search-box {
+    padding: 11px 15px;
+    border: 1px solid #ddd;
+    outline: none;
+    width: 220px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.product-card {
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn .6s ease;
+}
+
+.product-image {
+    height: 280px;
+    background: #f5f1e9;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: .6s;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.08);
+}
+
+.wishlist {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    background: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.wishlist.liked { color: #d34b5a; }
+
+.product-info {
+    padding: 17px 5px;
+}
+
+.product-info small {
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.product-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 23px;
+    margin: 5px 0;
+}
+
+.price {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.add-btn {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid var(--dark);
+    background: transparent;
+    transition: .3s;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.add-btn:hover {
+    background: var(--dark);
+    color: white;
+}
+
+.banner {
+    min-height: 340px;
+    background:
+      linear-gradient(#171511a8, #171511a8),
+      url('https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1500&q=85') center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 40px;
+}
+
+.banner h2 {
+    font: 55px 'Cormorant Garamond', serif;
+}
+
+.banner p { margin: 15px 0 25px; }
+
+footer {
+    background: #171511;
+    color: white;
+    padding: 55px 8% 25px;
+    text-align: center;
+}
+
+footer .logo { margin-bottom: 15px; }
+
+footer p {
+    color: #aaa;
+    font-size: 12px;
+    line-height: 2;
+}
+
+.newsletter {
+    margin: 25px auto;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.newsletter input {
+    padding: 13px;
+    width: 260px;
+    border: none;
+}
+
+.copyright {
+    border-top: 1px solid #444;
+    padding-top: 20px;
+    margin-top: 30px;
+}
+
+/* Cart drawer */
+
+.cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0008;
+    z-index: 200;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s;
+}
+
+.cart-overlay.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.cart-panel {
+    position: absolute;
+    right: -420px;
+    top: 0;
+    width: min(400px, 100%);
+    height: 100%;
+    background: white;
+    padding: 25px;
+    transition: .4s;
+    overflow-y: auto;
+}
+
+.cart-overlay.open .cart-panel { right: 0; }
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.close-cart {
+    background: none;
+    border: none;
+    font-size: 25px;
+}
+
+.cart-item {
+    display: flex;
+    gap: 12px;
+    padding: 17px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item img {
+    width: 75px;
+    height: 85px;
+    object-fit: cover;
+}
+
+.cart-item-info { flex: 1; }
+
+.cart-item-info h4 {
+    font: 20px 'Cormorant Garamond', serif;
+}
+
+.quantity {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    align-items: center;
+}
+
+.quantity button {
+    border: 1px solid #ddd;
+    background: white;
+    padding: 3px 9px;
+}
+
+.remove {
+    border: none;
+    background: none;
+    color: #a33;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 0;
+    font-weight: 600;
+}
+
+.checkout { width: 100%; }
+
+.empty-cart {
+    text-align: center;
+    padding: 50px 0;
+    color: var(--muted);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(35px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: .8s;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media(max-width: 900px) {
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .categories { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 650px) {
+    header { padding: 0 5%; }
+    .logo { font-size: 27px; }
+    nav {
+        display: none;
+        position: absolute;
+        top: 82px;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 25px;
+        flex-direction: column;
+    }
+    nav.show { display: flex; }
+    .menu-btn { display: block; }
+    .header-actions { gap: 13px; }
+    .hero { min-height: 480px; padding: 50px 7%; }
+    .section { padding: 60px 5%; }
+    .section-heading h2 { font-size: 39px; }
+    .categories { gap: 12px; }
+    .category { height: 210px; }
+    .product-grid { gap: 13px; }
+    .product-image { height: 210px; }
+    .product-info h3 { font-size: 20px; }
+    .shop-controls { align-items: flex-start; }
+    .search-box { width: 100%; }
+    .banner h2 { font-size: 40px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">AURELIA.</div>
+
+    <nav id="navbar">
+        <a href="#home">HOME</a>
+        <a href="#categories">COLLECTIONS</a>
+        <a href="#shop">SHOP</a>
+        <a href="#about">ABOUT</a>
+        <a href="#contact">CONTACT</a>
+    </nav>
+
+    <div class="header-actions">
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <button onclick="document.getElementById('shop').scrollIntoView()">⌕</button>
+        <button onclick="openCart()">🛍
+            <span id="cart-count">0</span>
+        </button>
+    </div>
+</header>
+
+<section class="hero" id="home">
+    <div class="hero-content">
+        <div class="eyebrow">TIMELESS BEAUTY · MODERN LUXURY</div>
+        <h1>Elegance That<br>Lasts Forever.</h1>
+        <p>Discover jewelry that tells your story. Beautifully crafted pieces designed to make every moment unforgettable.</p>
+        <button class="gold-btn" onclick="document.getElementById('shop').scrollIntoView()">EXPLORE COLLECTION</button>
+    </div>
+</section>
+
+<section class="section reveal" id="categories">
+    <div class="section-heading">
+        <small>EXPLORE OUR WORLD</small>
+        <h2>Shop By Category</h2>
+    </div>
+
+    <div class="categories">
+        <div class="category" onclick="filterProducts('Rings')">
+            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600">
+            <h3>Rings</h3>
+        </div>
+        <div class="category" onclick="filterProducts('Necklaces')">
+            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600">
+            <h3>Necklaces</h3>
+        </div>
+        <div class="category" onclick="filterProducts('Earrings')">
+            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600">
+            <h3>Earrings</h3>
+        </div>
+        <div class="category" onclick="filterProducts('Bracelets')">
+            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600">
+            <h3>Bracelets</h3>
+        </div>
+    </div>
+</section>
+
+<section class="section products-section" id="shop">
+    <div class="section-heading">
+        <small>HANDPICKED FOR YOU</small>
+        <h2>Our Best Sellers</h2>
+    </div>
+
+    <div class="shop-controls">
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterProducts('All',this)">All</button>
+            <button class="filter-btn" onclick="filterProducts('Rings',this)">Rings</button>
+            <button class="filter-btn" onclick="filterProducts('Necklaces',this)">Necklaces</button>
+            <button class="filter-btn" onclick="filterProducts('Earrings',this)">Earrings</button>
+            <button class="filter-btn" onclick="filterProducts('Bracelets',this)">Bracelets</button>
+        </div>
+        <input class="search-box" id="search" placeholder="Search jewelry..." oninput="renderProducts()">
+    </div>
+
+    <div class="product-grid" id="product-grid"></div>
+</section>
+
+<section class="banner reveal" id="about">
+    <div>
+        <div class="eyebrow">A TOUCH OF ELEGANCE</div>
+        <h2>Jewelry Made With Love</h2>
+        <p>Celebrate your beauty with timeless designs.</p>
+        <button class="gold-btn" onclick="document.getElementById('shop').scrollIntoView()">SHOP NOW</button>
+    </div>
+</section>
+
+<footer id="contact">
+    <div class="logo">AURELIA.</div>
+    <p>Where elegance meets craftsmanship.</p>
+
+    <div class="newsletter">
+        <input type="email" id="email" placeholder="Enter your email address">
+        <button class="gold-btn" onclick="subscribe()">SUBSCRIBE</button>
+    </div>
+
+    <p>Instagram &nbsp; | &nbsp; Facebook &nbsp; | &nbsp; Pinterest</p>
+    <p class="copyright">© 2026 AURELIA Jewelry. All Rights Reserved.</p>
+</footer>
+
+<!-- Shopping Cart -->
+<div class="cart-overlay" id="cart-overlay" onclick="overlayClick(event)">
+    <div class="cart-panel">
+        <div class="cart-header">
+            <h2 style="font-family:serif">Your Shopping Bag</h2>
+            <button class="close-cart" onclick="closeCart()">×</button>
+        </div>
+        <div id="cart-items"></div>
+        <div class="cart-total">
+            <span>Total</span>
+            <span id="cart-total">₹0</span>
+        </div>
+        <button class="gold-btn checkout" onclick="checkout()">PROCEED TO CHECKOUT</button>
+    </div>
+</div>
+
+<script>
+const products = [
+    {
+        id:1, name:"Golden Elegance Ring", category:"Rings",
+        price:2499,
+        image:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600"
+    },
+    {
+        id:2, name:"Diamond Spark Necklace", category:"Necklaces",
+        price:4999,
+        image:"https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600"
+    },
+    {
+        id:3, name:"Pearl Drop Earrings", category:"Earrings",
+        price:1899,
+        image:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600"
+    },
+    {
+        id:4, name:"Classic Gold Bracelet", category:"Bracelets",
+        price:3299,
+        image:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600"
+    },
+    {
+        id:5, name:"Royal Diamond Ring", category:"Rings",
+        price:5999,
+        image:"https://images.unsplash.com/photo-1603561596112-db4c0c5d8e7d?w=600"
+    },
+    {
+        id:6, name:"Luxury Gold Chain", category:"Necklaces",
+        price:3999,
+        image:"https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600"
+    },
+    {
+        id:7, name:"Floral Stud Earrings", category:"Earrings",
+        price:1599,
+        image:"https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=600"
+    },
+    {
+        id:8, name:"Elegant Charm Bracelet", category:"Bracelets",
+        price:2799,
+        image:"https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600"
+    }
+];
+
+let cart = [];
+let wishlist = [];
+let currentFilter = "All";
+
+function renderProducts() {
+    const grid = document.getElementById("product-grid");
+    const search = document.getElementById("search").value.toLowerCase();
+
+    const filtered = products.filter(p =>
+        (currentFilter === "All" || p.category === currentFilter) &&
+        p.name.toLowerCase().includes(search)
+    );
+
+    grid.innerHTML = filtered.length ? filtered.map(p => `
+        <div class="product-card">
+            <div class="product-image">
+                <img src="${p.image}" alt="${p.name}" loading="lazy">
+                <button class="wishlist ${wishlist.includes(p.id) ? 'liked' : ''}"
+                    onclick="toggleWishlist(${p.id})">
+                    ${wishlist.includes(p.id) ? '♥' : '♡'}
+                </button>
+            </div>
+            <div class="product-info">
+                <small>${p.category.toUpperCase()}</small>
+                <h3>${p.name}</h3>
+                <div class="price">₹${p.price.toLocaleString("en-IN")}</div>
+                <button class="add-btn" onclick="addToCart(${p.id})">
+                    ADD TO BAG +
+                </button>
+            </div>
+        </div>
+    `).join("") : "<p>No products found.</p>";
+}
+
+function filterProducts(category, button) {
+    currentFilter = category;
+
+    document.querySelectorAll(".filter-btn").forEach(btn =>
+        btn.classList.remove("active")
+    );
+
+    if (button) button.classList.add("active");
+    else {
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            if(btn.textContent.trim() === category)
+                btn.classList.add("active");
+        });
+    }
+
+    document.getElementById("shop").scrollIntoView({behavior:"smooth"});
+    renderProducts();
+}
+
+function toggleWishlist(id) {
+    wishlist = wishlist.includes(id)
+        ? wishlist.filter(item => item !== id)
+        : [...wishlist, id];
+    renderProducts();
+}
+
+function addToCart(id) {
+    const item = cart.find(p => p.id === id);
+
+    if(item) item.quantity++;
+    else cart.push({...products.find(p => p.id === id), quantity:1});
+
+    updateCart();
+}
+
+function updateCart() {
+    const count = cart.reduce((sum,p) => sum + p.quantity,0);
+    document.getElementById("cart-count").textContent = count;
+
+    const container = document.getElementById("cart-items");
+
+    if(cart.length === 0) {
+        container.innerHTML = '<div class="empty-cart">Your bag is empty ♡</div>';
+    } else {
+        container.innerHTML = cart.map(p => `
+            <div class="cart-item">
+                <img src="${p.image}">
+                <div class="cart-item-info">
+                    <h4>${p.name}</h4>
+                    <p>₹${p.price.toLocaleString("en-IN")}</p>
+                    <div class="quantity">
+                        <button onclick="changeQty(${p.id},-1)">−</button>
+                        ${p.quantity}
+                        <button onclick="changeQty(${p.id},1)">+</button>
+                    </div>
+                    <button class="remove" onclick="removeItem(${p.id})">Remove</button>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    const total = cart.reduce((sum,p) => sum + p.price*p.quantity,0);
+    document.getElementById("cart-total").textContent =
+        "₹" + total.toLocaleString("en-IN");
+}
+
+function changeQty(id, amount) {
+    const item = cart.find(p => p.id === id);
+    item.quantity += amount;
+    if(item.quantity <= 0) removeItem(id);
+    else updateCart();
+}
+
+function removeItem(id) {
+    cart = cart.filter(p => p.id !== id);
+    updateCart();
+}
+
+function openCart() {
+    document.getElementById("cart-overlay").classList.add("open");
+}
+
+function closeCart() {
+    document.getElementById("cart-overlay").classList.remove("open");
+}
+
+function overlayClick(event) {
+    if(event.target.id === "cart-overlay") closeCart();
+}
+
+function checkout() {
+    if(cart.length === 0) {
+        alert("Your shopping bag is empty!");
+        return;
+    }
+
+    alert("Demo checkout! Connect a payment gateway and backend to accept real orders.");
+}
+
+function subscribe() {
+    const email = document.getElementById("email");
+    if(!email.value || !email.checkValidity()) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+    alert("Thank you for subscribing!");
+    email.value = "";
+}
+
+function toggleMenu() {
+    document.getElementById("navbar").classList.toggle("show");
+}
+
+document.querySelectorAll("nav a").forEach(a =>
+    a.addEventListener("click", () =>
+        document.getElementById("navbar").classList.remove("show")
+    )
+);
+
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting) {
+            entry.target.classList.add("visible");
+        }
+    });
+}, {threshold:0.12});
+
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+renderProducts();
+updateCart();
+</script>
+
+</body>
+</html>
